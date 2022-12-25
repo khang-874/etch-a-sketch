@@ -7,8 +7,6 @@ const defaultColor = "#322F2B";
 let color = defaultColor;
 {
 padContainer.setAttribute("id", "padContainer");
-padContainer.style = `grid-template-rows: repeat(${numberOfRows},1fr)`;
-padContainer.style = `grid-template-columns: repeat(${numberOfColumns}, 1fr)`;
 }
 let navigatorBar = document.createElement("div");
 let draw = false;
@@ -18,6 +16,9 @@ let resetButton = document.createElement("div");
 let basicColorButton = document.createElement("div");
 let randomColorButton = document.createElement("div");
 let choosen = false;
+let rangeSlider = document.createElement("input");
+let size = document.createElement("div");
+let createPadButton = document.createElement("div");
 {
 navigatorBar.setAttribute("id", "navigatorBar");
 resetButton.className = "navigatorButton"
@@ -68,10 +69,36 @@ resetButton.addEventListener("mousedown", e => {
         div.classList.remove("navigatorSelected");
 })
 
+rangeSlider.id = "rangeSlider";
+rangeSlider.setAttribute("type", "range");
+rangeSlider.setAttribute("min", "1");
+rangeSlider.setAttribute("max", "101");
+rangeSlider.setAttribute("value", "16");
+rangeSlider.setAttribute("step", "3");
+rangeSlider.setAttribute("defaultValue", "16");
+rangeSlider.addEventListener("input", e => {
+    console.log(e.target.value);
+    size.innerHTML = `${e.target.value} x ${e.target.value}`
+})
+
+size.id = "sizeBox";
+size.innerHTML = `${rangeSlider.value} x ${rangeSlider.value}`;
+
+createPadButton.innerText = "Create";
+createPadButton.classList.add("navigatorButton");
+createPadButton.addEventListener("mousedown", e => {
+    reset(e);
+    numberOfColumns = rangeSlider.value;
+    numberOfRows = rangeSlider.value;
+    createPad();
+})
 navigatorBar.appendChild(basicColorButton);
 navigatorBar.appendChild(randomColorButton);
 navigatorBar.appendChild(eraserButton);
 navigatorBar.appendChild(resetButton);
+navigatorBar.appendChild(size);
+navigatorBar.appendChild(rangeSlider);
+navigatorBar.appendChild(createPadButton);
 }
 
         
@@ -106,14 +133,14 @@ function getRandomColor(){
 }
 function addColor(e){
     let currentDiv = e.target;
-    if(draw){
+    if(draw || (!erase && e.type == "mousedown")){
         if(color != '')
             currentDiv.style.backgroundColor = color;
         else{
             currentDiv.style.backgroundColor = getRandomColor();
         }
     }
-    if(erase)
+    if(erase && draw)
         currentDiv.style.backgroundColor = "white";
 }
 
@@ -125,15 +152,21 @@ playGroundTitle.innerText = "Etch-a-Sketch";
 playGroundTitle.id = "playGroundTitle";
 
 playGround.appendChild(playGroundTitle);
-for(let i = 0; i < numberOfRows; ++i){
-    for(let j = 0; j < numberOfColumns; ++j){
-        let pad = document.createElement("div");
-        pad.setAttribute("class", `pad`);
-        pad.addEventListener("mouseover", addColor);
-        pad.addEventListener
-        padContainer.appendChild(pad);
-    }
+function createPad(){
+    padContainer.style = `grid-template-rows: repeat(${numberOfRows},1fr)`;
+    padContainer.style = `grid-template-columns: repeat(${numberOfColumns}, 1fr)`;
+    padContainer.innerHTML = '';
+    for(let i = 0; i < numberOfRows; ++i){
+        for(let j = 0; j < numberOfColumns; ++j){
+            let pad = document.createElement("div");
+            pad.setAttribute("class", `pad`);
+            pad.addEventListener("mouseover", addColor);
+            pad.addEventListener("mousedown", addColor);
+            padContainer.appendChild(pad);
+        }
 }
+}
+createPad();
 playGround.appendChild(padContainer)
 container.appendChild(navigatorBar);
 container.appendChild(playGround);
