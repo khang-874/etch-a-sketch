@@ -16,6 +16,19 @@
     border-radius: 15px;
 }
 
+#playGround{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#playGroundTitle{
+    font-size: 50px;
+    color: #4B4741;
+    margin: 0;
+    padding: 0;
+}
 .pad{
     background-color: white;
     width: 100%;

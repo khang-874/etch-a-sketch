@@ -116,6 +116,15 @@ function addColor(e){
     if(erase)
         currentDiv.style.backgroundColor = "white";
 }
+
+let playGround = document.createElement('div');
+playGround.id = "playGround";
+
+let playGroundTitle = document.createElement('h1');
+playGroundTitle.innerText = "Etch-a-Sketch";
+playGroundTitle.id = "playGroundTitle";
+
+playGround.appendChild(playGroundTitle);
 for(let i = 0; i < numberOfRows; ++i){
     for(let j = 0; j < numberOfColumns; ++j){
         let pad = document.createElement("div");
@@ -125,6 +134,6 @@ for(let i = 0; i < numberOfRows; ++i){
         padContainer.appendChild(pad);
     }
 }
-
+playGround.appendChild(padContainer)
 container.appendChild(navigatorBar);
-container.appendChild(padContainer);
+container.appendChild(playGround);
