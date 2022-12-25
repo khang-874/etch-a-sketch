@@ -11,27 +11,33 @@ let navigatorBar = document.createElement("div");
 navigatorBar.setAttribute("id", "navigatorBar");
 
 let resetButton = document.createElement("div");
-resetButton.setAttribute("id", "resetButton");
-resetButton. innerText = "Reset";
+resetButton.className = "navigatorButton"
+resetButton.innerText = "Reset";
 
-let blackColorButton = document.createElement("div");
+let draw = false;
+let erase = false;
 
+let eraserButton = document.createElement("div");
+eraserButton.className = "navigatorButton";
+eraserButton.innerText = "Eraser";
+eraserButton.addEventListener('mousedown', e => {
+    erase = !erase;
+    eraserButton.classList.toggle("navigatorSelected")
+});
 
-let instruction = document.createElement("div");
-instruction.innerText = "Hold Spacebar to draw";
-instruction.id = "instruction";
-navigatorBar.appendChild(instruction);
+navigatorBar.appendChild(eraserButton);
 navigatorBar.appendChild(resetButton);
-let play = false;
+
+
         
-window.addEventListener('keydown', e => {
-    if(e.key == " ")
-        play = true;  
+window.addEventListener('mousedown', e => {
+    draw = true; 
 });
 
-window.addEventListener('keyup', e =>{
-    play = false;
-});
+window.addEventListener('mouseup', e =>{
+    draw = false;
+})
+
 
 function reset(e){
     let padList = padContainer.querySelectorAll("div");
@@ -40,12 +46,13 @@ function reset(e){
 }
 resetButton.addEventListener("mousedown", reset);
 
+let basicColor = "#322F2B";
 function addColorClass(e){
-    if(play){
-        let currentDiv = e.target;
-        currentDiv.style.backgroundColor = "black";
-    }
-
+    let currentDiv = e.target;
+    if(draw)
+        currentDiv.style.backgroundColor = basicColor;
+    if(erase)
+        currentDiv.style.backgroundColor = "white";
 }
 for(let i = 0; i < numberOfRows; ++i){
     for(let j = 0; j < numberOfColumns; ++j){
